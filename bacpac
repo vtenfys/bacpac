@@ -18,8 +18,13 @@ bacpac-usage() {
   echo 'bacpac version 0.1'
   echo 'Copyright (c) 2015 David Bailey <robocoder.db@gmail.com>'
   echo
-  echo "usage: $0 update|restore|clean"
+  echo "usage: $0 backup|restore|clean"
   echo "   or: $0 help"
+  echo
+  echo 'backup:  Backs up current packages and configuration'
+  echo 'restore: Restores packages and configuration'
+  echo 'clean:   Deletes temporary directory'
+  echo 'help:    Shows this message'
   echo
 }
 
