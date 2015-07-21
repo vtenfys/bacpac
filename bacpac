@@ -100,7 +100,6 @@ bacpac-restore() {
 
 bacpac-package-restore-install() {
   grep -F -x -v -f 'tmp/packages.list' 'packages.list' > 'tmp/install.list'
-  grep -F -x -v -f 'packages.list' 'tmp/packages.list' > 'tmp/remove.list'
   rm -f 'tmp/caninstall.list'
   rm -f 'tmp/cannotinstall.list'
   while read package; do
@@ -133,6 +132,24 @@ bacpac-package-restore-install() {
   echo
 }
 
+bacpac-package-restore-remove() {
+  grep -F -x -v -f 'packages.list' 'tmp/packages.list' > 'tmp/remove.list'
+  if [[ -s 'tmp/remove.list' ]]; then
+    cat 'tmp/remove.list'
+    read -p 'Remove the above packages? [Y/n] ' response
+    if [[ "$response" =~ ^[Yy]$ || "$response" == '' ]]; then
+      cat 'tmp/remove.list' | sudo pacman -Rsn - &&
+      echo 'Successfully removed the above packages' ||
+      echo 'Error removing the above packages'
+    else
+      echo 'Not removing the above packages'
+    fi
+  else
+    echo 'No packages to remove'
+  fi
+  echo
+}
+
 if [[ "$#" != 1 ]]; then
   bacpac-usage
   exit 1
@@ -145,10 +162,10 @@ if [[ "$1" == backup ]]; then
   bacpac-backup 'pacman.conf'
 elif [[ "$1" == restore ]]; then
   bacpac-setup
-  echo 'WARNING: Not fully implemented'
   bacpac-restore 'mirrorlist' '/etc/pacman.d/mirrorlist'
   bacpac-restore 'pacman.conf' '/etc/pacman.conf'
   bacpac-package-restore-install
+  bacpac-package-restore-remove
 elif [[ "$1" == clean ]]; then
   rm -rf tmp
 elif [[ "$1" == help ]]; then
