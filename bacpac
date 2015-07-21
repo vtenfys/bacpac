@@ -171,6 +171,7 @@ bacpac-init() {
     echo
     exit 1
   fi
+  bacpac-setup
   bacpac-backup 'packages.list'
   bacpac-backup 'mirrorlist'
   bacpac-backup 'pacman.conf'
