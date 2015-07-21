@@ -58,10 +58,44 @@ bacpac-restore() {
   read -p "Restore $1 to $2? [Y/n] " response
   if [[ "$response" =~ ^[Yy]$ || "$response" == '' ]]; then
     sudo cp "$1" "$2" &&
-    echo "Restored $1 to $2" ||
+    echo "Successfully restored $1 to $2" ||
     echo "Error restoring $1 to $2"
   else
     echo "Not restoring $1 to $2"
+  fi
+  echo
+}
+
+bacpac-package-restore-install() {
+  grep -F -x -v -f 'tmp/packages.list' 'packages.list' > 'tmp/install.list'
+  grep -F -x -v -f 'packages.list' 'tmp/packages.list' > 'tmp/remove.list'
+  rm -f 'tmp/caninstall.list'
+  rm -f 'tmp/cannotinstall.list'
+  while read package; do
+    if pacman -Si $package &> '/dev/null'; then
+      echo $package >> 'tmp/caninstall.list'
+    else
+      echo $package >> 'tmp/cannotinstall.list'
+    fi
+  done < 'tmp/install.list'
+  if [[ -s 'tmp/cannotinstall.list' ]]; then
+    echo 'The following packages cannot be installed:'
+    cat 'tmp/cannotinstall.list'
+    echo 'These packages may have been installed from the AUR or another repository'
+    echo
+  fi
+  if [[ -s 'tmp/caninstall.list' ]]; then
+    cat 'tmp/caninstall.list'
+    read -p 'Install the above packages? [Y/n] ' response
+    if [[ "$response" =~ ^[Yy]$ || "$response" == '' ]]; then
+      cat 'tmp/caninstall.list' | sudo pacman -S - &&
+      echo 'Successfully installed the above packages' ||
+      echo 'Error installing the above packages'
+    else
+      echo 'Not installing the above packages'
+    fi
+  else
+    echo 'No packages to install'
   fi
   echo
 }
@@ -81,9 +115,7 @@ elif [[ "$1" == restore ]]; then
   echo 'WARNING: Not fully implemented'
   bacpac-restore 'mirrorlist' '/etc/pacman.d/mirrorlist'
   bacpac-restore 'pacman.conf' '/etc/pacman.conf'
-
-  grep -F -x -v -f 'tmp/packages.list' 'packages.list' > 'tmp/install.list'
-  grep -F -x -v -f 'packages.list' 'tmp/packages.list' > 'tmp/remove.list'
+  bacpac-package-restore-install
 elif [[ "$1" == clean ]]; then
   rm -rf tmp
 elif [[ "$1" == help ]]; then
