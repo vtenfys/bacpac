@@ -161,6 +161,7 @@ bacpac-init() {
   read -p 'Press ENTER when finished'
   read -p 'Now, copy and paste, or type out the URL in the address bar here: ' url
   git remote add origin $url
+  git remote add updates 'https://github.com/tech4david/bacpac'
   if git push -f --set-upstream origin master; then
     echo 'Successfully initialized the repository'
     echo
