@@ -11,7 +11,9 @@ Dependencies
 
 * [bash] for the script itself
 * [git] for cloning the repository and backing up the packages to another one
+* [sudo] for restoring configuration data
 * ...that's all!
 
 [bash]: https://www.archlinux.org/packages/core/x86_64/bash/
 [git]: https://www.archlinux.org/packages/extra/x86_64/git/
+[sudo]: https://www.archlinux.org/packages/core/x86_64/sudo/

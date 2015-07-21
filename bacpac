@@ -31,9 +31,9 @@ bacpac-usage() {
 bacpac-setup() {
   cd "$(dirname "${BASH_SOURCE[0]}")"
   mkdir -p tmp
-  pacman -Qqe > tmp/packages.list
-  cp /etc/pacman.d/mirrorlist tmp/mirrorlist
-  cp /etc/pacman.conf tmp/pacman.conf
+  pacman -Qqe > 'tmp/packages.list'
+  cp '/etc/pacman.d/mirrorlist' 'tmp/mirrorlist'
+  cp '/etc/pacman.conf' 'tmp/pacman.conf'
 }
 
 bacpac-backup() {
@@ -67,7 +67,9 @@ if [[ "$1" == backup ]]; then
   bacpac-backup 'pacman.conf'
 elif [[ "$1" == restore ]]; then
   bacpac-setup
-  echo 'Not implemented'
+  echo 'WARNING: Not fully implemented'
+  sudo cp 'mirrorlist' '/etc/pacman.d/mirrorlist'
+  sudo cp 'pacman.conf' '/etc/pacman.conf'
 elif [[ "$1" == clean ]]; then
   rm -rf tmp
 elif [[ "$1" == help ]]; then
