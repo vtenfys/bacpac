@@ -81,6 +81,9 @@ elif [[ "$1" == restore ]]; then
   echo 'WARNING: Not fully implemented'
   bacpac-restore 'mirrorlist' '/etc/pacman.d/mirrorlist'
   bacpac-restore 'pacman.conf' '/etc/pacman.conf'
+
+  grep -F -x -v -f 'tmp/packages.list' 'packages.list' > 'tmp/install.list'
+  grep -F -x -v -f 'packages.list' 'tmp/packages.list' > 'tmp/remove.list'
 elif [[ "$1" == clean ]]; then
   rm -rf tmp
 elif [[ "$1" == help ]]; then

@@ -10,10 +10,12 @@ Dependencies
 ------------
 
 * [bash] for the script itself
-* [git] for cloning the repository and backing up the packages to another one
-* [sudo] for restoring configuration data
+* [git] and [diffutils] for backing up current packages and configuration
+* [sudo] and [grep] for restoring packages and configuration
 * ...that's all!
 
 [bash]: https://www.archlinux.org/packages/core/x86_64/bash/
 [git]: https://www.archlinux.org/packages/extra/x86_64/git/
+[diffutils]: https://www.archlinux.org/packages/core/x86_64/diffutils/
 [sudo]: https://www.archlinux.org/packages/core/x86_64/sudo/
+[grep]: https://www.archlinux.org/packages/core/x86_64/grep/
