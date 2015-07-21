@@ -81,7 +81,9 @@ bacpac-backup() {
       mv "tmp/$1" "$1"
       git add "$1"
       git commit -m "Update $1 with bacpac"
-      git push
+      git push &&
+      echo "Successfully backed up $1" ||
+      echo "Error backing up $1"
     fi
   else
     echo "No modifications to '$1' since last backup"
