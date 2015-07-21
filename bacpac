@@ -177,12 +177,13 @@ bacpac-init() {
   bacpac-backup 'pacman.conf'
   echo 'Ready to go!'
   echo
-  echo 'To backup your current packages and configuration, simply run the following:'
+  echo 'To backup your current packages and configuration, simply run the following at'
+  echo 'any time:'
   echo
   echo '  ./bacpac backup'
   echo
-  echo 'To restore your packages and configuration, run the following on another'
-  echo 'Arch Linux computer:'
+  echo 'To restore your packages and configuration on another computer or after'
+  echo 'reinstalling the operating system, run the following:'
   echo
   echo "  git clone $url bacpac"
   echo '  cd bacpac'
