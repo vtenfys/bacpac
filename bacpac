@@ -28,7 +28,39 @@ bacpac-usage() {
   echo
 }
 
+bacpac-check-dependencies() {
+  if [[ ! -f '/usr/bin/pacman' ]]; then
+    echo 'You must be using Arch Linux to use bacpac'
+    exit 1
+  fi
+  rm -f 'tmp/notinstalled.list'
+  if [[ ! -f '/usr/bin/bash' ]]; then
+    echo 'bash' >> 'tmp/notinstalled.list'
+  fi
+  if [[ ! -f '/usr/bin/git' ]]; then
+    echo 'git' >> 'tmp/notinstalled.list'
+  fi
+  if [[ ! -f '/usr/bin/diff' ]]; then
+    echo 'diffutils' >> 'tmp/notinstalled.list'
+  fi
+  if [[ ! -f '/usr/bin/sudo' ]]; then
+    echo 'sudo' >> 'tmp/notinstalled.list'
+  fi
+  if [[ ! -f '/usr/bin/grep' ]]; then
+    echo 'grep' >> 'tmp/notinstalled.list'
+  fi
+  if [[ -f 'tmp/notinstalled.list' ]]; then
+    echo 'You need to install the following packages to use bacpac:'
+    cat 'tmp/notinstalled.list'
+    echo "If they are installed to another location, please symlink them into /usr/bin or"
+    echo 'modify the script as you see fit'
+    echo
+    exit 1
+  fi
+}
+
 bacpac-setup() {
+  bacpac-check-dependencies
   cd "$(dirname "${BASH_SOURCE[0]}")"
   mkdir -p tmp
   pacman -Qqe > 'tmp/packages.list'
@@ -82,6 +114,7 @@ bacpac-package-restore-install() {
     echo 'The following packages cannot be installed:'
     cat 'tmp/cannotinstall.list'
     echo 'These packages may have been installed from the AUR or another repository'
+    echo 'Please install them manually later'
     echo
   fi
   if [[ -s 'tmp/caninstall.list' ]]; then
