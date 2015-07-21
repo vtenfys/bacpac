@@ -18,8 +18,8 @@ bacpac-usage() {
   echo 'bacpac version 0.1'
   echo 'Copyright (c) 2015 David Bailey <robocoder.db@gmail.com>'
   echo
-  echo "usage: $0 update"
-  echo "   or: $0 restore"
+  echo "usage: $0 update|restore"
+  echo "   or: $0 help"
   echo
 }
 
@@ -27,10 +27,31 @@ bacpac-setup() {
   cd "$(dirname "${BASH_SOURCE[0]}")"
   mkdir -p tmp
   pacman -Qqe > tmp/packages.list
-  cat /etc/pacman.conf > tmp/pacman.conf
+  cp /etc/pacman.d/mirrorlist tmp/mirrorlist
+  cp /etc/pacman.conf tmp/pacman.conf
 }
 
-if [ "$#" -ne 1 ]; then
+if [[ "$#" != 1 ]]; then
+  bacpac-usage
+  exit 1
+fi
+
+if [[ "$1" == backup ]]; then
+  bacpac-setup
+  diff packages.list tmp/packages.list > tmp/packages.list.diff
+  if [[ -s tmp/packages.list.diff ]]; then
+    echo "Modifications to 'packages.list' since last backup:"
+    cat tmp/packages.list.diff
+  else
+    echo "No modifications to 'packages.list' since last backup"
+  fi
+  rm tmp/packages.list.diff
+elif [[ "$1" == restore ]]; then
+  bacpac-setup
+  echo 'Not implemented'
+elif [[ "$1" == help ]]; then
+  bacpac-usage
+else
   bacpac-usage
   exit 1
 fi
