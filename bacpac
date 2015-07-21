@@ -52,7 +52,6 @@ bacpac-backup() {
     echo "No modifications to '$1' since last backup"
   fi
   echo
-  rm "tmp/$1.diff"
 }
 
 bacpac-restore() {
