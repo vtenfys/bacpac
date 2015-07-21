@@ -209,7 +209,7 @@ bacpac-update() {
     mv 'packages.list' 'tmp/packages.list'
     mv 'mirrorlist' 'tmp/mirrorlist'
     mv 'pacman.conf' 'tmp/pacman.conf'
-    git merge updates/master -X theirs
+    git merge updates/master -X theirs -m 'Update bacpac'
     mv 'tmp/packages.list' 'packages.list'
     mv 'tmp/mirrorlist' 'mirrorlist'
     mv 'tmp/pacman.conf' 'pacman.conf'
