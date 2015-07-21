@@ -39,7 +39,8 @@ instructions:
 
 5. Follow the instructions displayed on the terminal.
 
-Please report any issues you find with bacpac [here].
+Please report any issues you find with bacpac [here] or [submit a pull request].
 
 [Create a GitHub account]: https://github.com/join
 [here]: https://github.com/tech4david/bacpac/issues
+[submit a pull request]: https://github.com/tech4david/bacpac/compare/
