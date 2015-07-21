@@ -55,6 +55,18 @@ bacpac-backup() {
   rm "tmp/$1.diff"
 }
 
+bacpac-restore() {
+  read -p "Restore $1 to $2? [Y/n] " response
+  if [[ "$response" =~ ^[Yy]$ || "$response" == '' ]]; then
+    sudo cp "$1" "$2" &&
+    echo "Restored $1 to $2" ||
+    echo "Error restoring $1 to $2"
+  else
+    echo "Not restoring $1 to $2"
+  fi
+  echo
+}
+
 if [[ "$#" != 1 ]]; then
   bacpac-usage
   exit 1
@@ -68,8 +80,8 @@ if [[ "$1" == backup ]]; then
 elif [[ "$1" == restore ]]; then
   bacpac-setup
   echo 'WARNING: Not fully implemented'
-  sudo cp 'mirrorlist' '/etc/pacman.d/mirrorlist'
-  sudo cp 'pacman.conf' '/etc/pacman.conf'
+  bacpac-restore 'mirrorlist' '/etc/pacman.d/mirrorlist'
+  bacpac-restore 'pacman.conf' '/etc/pacman.conf'
 elif [[ "$1" == clean ]]; then
   rm -rf tmp
 elif [[ "$1" == help ]]; then
