@@ -18,12 +18,13 @@ bacpac-usage() {
   echo 'bacpac version 0.1.0'
   echo 'Copyright (c) 2015 David Bailey <robocoder.db@gmail.com>'
   echo
-  echo "usage: $0 init|backup|restore|clean"
+  echo "usage: $0 init|backup|restore|update|clean"
   echo "   or: $0 help"
   echo
   echo 'init:    Initializes bacpac for the first time'
   echo 'backup:  Backs up current packages and configuration'
   echo 'restore: Restores packages and configuration'
+  echo 'update:  Update bacpac to the latest version'
   echo 'clean:   Deletes temporary directory'
   echo 'help:    Shows this message'
   echo
@@ -190,12 +191,35 @@ bacpac-init() {
   echo '  cd bacpac'
   echo '  ./bacpac restore'
   echo
+  echo 'To update bacpac, which you should do every few days to stay up-to-date, run the'
+  echo 'following:'
+  echo
+  echo '  ./bacpac update'
+  echo
   echo 'You can find the URL above by going to https://gist.github.com/ and signing in'
   echo 'to view your Gists, so you do not need to write it down. You only need to'
   echo 'remember your GitHub username and password.'
   echo
   echo 'Have fun!'
   echo
+}
+
+bacpac-update() {
+  if git fetch updates; then
+    mv 'packages.list' 'tmp/packages.list'
+    mv 'mirrorlist' 'tmp/mirrorlist'
+    mv 'pacman.conf' 'tmp/pacman.conf'
+    git merge updates/master -X theirs
+    mv 'tmp/packages.list' 'packages.list'
+    mv 'tmp/mirrorlist' 'mirrorlist'
+    mv 'tmp/pacman.conf' 'pacman.conf'
+    echo 'Successfully updated bacpac'
+    echo
+  else
+    echo 'Error updating bacpac'
+    echo
+    exit 1
+  fi
 }
 
 if [[ "$#" != 1 ]]; then
@@ -216,6 +240,9 @@ elif [[ "$1" == restore ]]; then
   bacpac-restore 'pacman.conf' '/etc/pacman.conf'
   bacpac-package-restore-install
   bacpac-package-restore-remove
+elif [[ "$1" == update ]]; then
+  bacpac-setup
+  bacpac-update
 elif [[ "$1" == clean ]]; then
   rm -rf tmp
 elif [[ "$1" == help ]]; then
