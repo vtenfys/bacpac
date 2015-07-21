@@ -1,8 +1,8 @@
 bacpac
 ======
 
-bacpac is a backup and restore script for [Arch Linux] packages installed using
-pacman and pacman's configuration data.
+bacpac is a backup and restore script for [Arch Linux]'s pacman configuration
+data and manually installed packages.
 
 [Arch Linux]: https://www.archlinux.org/
 

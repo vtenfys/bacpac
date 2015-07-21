@@ -31,6 +31,25 @@ bacpac-setup() {
   cp /etc/pacman.conf tmp/pacman.conf
 }
 
+bacpac-backup() {
+  diff "$1" "tmp/$1" > "tmp/$1.diff"
+  if [[ -s "tmp/$1.diff" ]]; then
+    echo "Modifications to '$1' since last backup:"
+    cat "tmp/$1.diff"
+    read -p "Back up $1? [Y/n] " response
+    if [[ "$response" =~ ^[Yy]$ || "$response" == '' ]]; then
+      mv "tmp/$1" "$1"
+      git add "$1"
+      git commit -m '' --allow-empty-message
+      git push
+    fi
+  else
+    echo "No modifications to '$1' since last backup"
+  fi
+  echo
+  rm "tmp/$1.diff"
+}
+
 if [[ "$#" != 1 ]]; then
   bacpac-usage
   exit 1
@@ -38,23 +57,9 @@ fi
 
 if [[ "$1" == backup ]]; then
   bacpac-setup
-  diff packages.list tmp/packages.list > tmp/packages.list.diff
-  if [[ -s tmp/packages.list.diff ]]; then
-    echo "Modifications to 'packages.list' since last backup:"
-    cat tmp/packages.list.diff
-    read -p "Back up? [Y/n] " response
-    if [[ "$response" =~ ^[Yy]$ || "$response" == '' ]]; then
-      mv tmp/packages.list packages.list
-      git add packages.list
-      git commit -m '' --allow-empty-message
-      git push
-    else
-      echo false
-    fi
-  else
-    echo "No modifications to 'packages.list' since last backup"
-  fi
-  rm tmp/packages.list.diff
+  bacpac-backup 'packages.list'
+  bacpac-backup 'mirrorlist'
+  bacpac-backup 'pacman.conf'
 elif [[ "$1" == restore ]]; then
   bacpac-setup
   echo 'Not implemented'
