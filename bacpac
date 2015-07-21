@@ -15,7 +15,7 @@
 # CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 bacpac-usage() {
-  echo 'bacpac version 0.1'
+  echo 'bacpac version 0.1.0'
   echo 'Copyright (c) 2015 David Bailey <robocoder.db@gmail.com>'
   echo
   echo "usage: $0 init|backup|restore|clean"
@@ -55,7 +55,7 @@ bacpac-check-dependencies() {
     echo 'You need to install the following packages to use bacpac:'
     cat 'tmp/notinstalled.list'
     echo "If they are installed to another location, please symlink them into /usr/bin or"
-    echo 'modify the script as you see fit'
+    echo 'modify the script as you see fit.'
     echo
     exit 1
   fi
@@ -114,8 +114,8 @@ bacpac-package-restore-install() {
   if [[ -s 'tmp/cannotinstall.list' ]]; then
     echo 'The following packages cannot be installed:'
     cat 'tmp/cannotinstall.list'
-    echo 'These packages may have been installed from the AUR or another repository'
-    echo 'Please install them manually later'
+    echo 'These packages may have been installed from the AUR or another repository.'
+    echo 'Please install them manually later.'
     echo
   fi
   if [[ -s 'tmp/caninstall.list' ]]; then
@@ -167,7 +167,7 @@ bacpac-init() {
   else
     echo 'Error initializing the repository'
     echo "Please run 'bacpac init' again until successful, or bacpac will not work"
-    echo "properly"
+    echo 'properly.'
     echo
     exit 1
   fi
@@ -175,12 +175,21 @@ bacpac-init() {
   bacpac-backup 'mirrorlist'
   bacpac-backup 'pacman.conf'
   echo 'Ready to go!'
+  echo
+  echo 'To backup your current packages and configuration, simply run the following:'
+  echo
+  echo '  ./bacpac backup'
+  echo
   echo 'To restore your packages and configuration, run the following on another'
   echo 'Arch Linux computer:'
   echo
   echo "  git clone $url bacpac"
   echo '  cd bacpac'
   echo '  ./bacpac restore'
+  echo
+  echo 'You can find the URL above by going to https://gist.github.com/ and signing in'
+  echo 'to view your Gists, so you do not need to write it down. You only need to'
+  echo 'remember your GitHub username and password.'
   echo
   echo 'Have fun!'
   echo
