@@ -42,6 +42,15 @@ if [[ "$1" == backup ]]; then
   if [[ -s tmp/packages.list.diff ]]; then
     echo "Modifications to 'packages.list' since last backup:"
     cat tmp/packages.list.diff
+    read -p "Back up? [Y/n] " response
+    if [[ "$response" =~ ^[Yy]$ || "$response" == '' ]]; then
+      mv tmp/packages.list packages.list
+      git add packages.list
+      git commit -m '' --allow-empty-message
+      git push
+    else
+      echo false
+    fi
   else
     echo "No modifications to 'packages.list' since last backup"
   fi
