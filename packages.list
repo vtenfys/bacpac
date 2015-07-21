@@ -43,7 +43,7 @@ netctl
 pacman
 patch
 pciutils
-pcmiautils
+pcmciautils
 perl
 pkg-config
 procps-ng
