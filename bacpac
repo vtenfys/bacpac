@@ -215,6 +215,7 @@ bacpac-update() {
     mv 'tmp/packages.list' 'packages.list'
     mv 'tmp/mirrorlist' 'mirrorlist'
     mv 'tmp/pacman.conf' 'pacman.conf'
+    git push
     echo 'Successfully updated bacpac'
     echo
   else
