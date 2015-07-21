@@ -18,7 +18,7 @@ bacpac-usage() {
   echo 'bacpac version 0.1'
   echo 'Copyright (c) 2015 David Bailey <robocoder.db@gmail.com>'
   echo
-  echo "usage: $0 update|restore"
+  echo "usage: $0 update|restore|clean"
   echo "   or: $0 help"
   echo
 }
@@ -63,6 +63,8 @@ if [[ "$1" == backup ]]; then
 elif [[ "$1" == restore ]]; then
   bacpac-setup
   echo 'Not implemented'
+elif [[ "$1" == clean ]]; then
+  rm -rf tmp
 elif [[ "$1" == help ]]; then
   bacpac-usage
 else
