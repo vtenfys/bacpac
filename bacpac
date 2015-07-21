@@ -18,9 +18,10 @@ bacpac-usage() {
   echo 'bacpac version 0.1'
   echo 'Copyright (c) 2015 David Bailey <robocoder.db@gmail.com>'
   echo
-  echo "usage: $0 backup|restore|clean"
+  echo "usage: $0 init|backup|restore|clean"
   echo "   or: $0 help"
   echo
+  echo 'init:    Initializes bacpac for the first time'
   echo 'backup:  Backs up current packages and configuration'
   echo 'restore: Restores packages and configuration'
   echo 'clean:   Deletes temporary directory'
@@ -31,6 +32,7 @@ bacpac-usage() {
 bacpac-check-dependencies() {
   if [[ ! -f '/usr/bin/pacman' ]]; then
     echo 'You must be using Arch Linux to use bacpac'
+    echo
     exit 1
   fi
   rm -f 'tmp/notinstalled.list'
@@ -150,12 +152,38 @@ bacpac-package-restore-remove() {
   echo
 }
 
+bacpac-init() {
+  bacpac-check-dependencies
+  git remote remove origin
+  echo 'Welcome to bacpac!'
+  echo 'To begin, go to https://gist.github.com/ and create a new secret Gist with any'
+  echo 'name and content'
+  read -p 'Press ENTER when finished'
+  read -p 'Now, copy the HTTPS clone URL and paste or type it here: ' url
+  git remote add origin $url
+  if git push -f --set-upstream origin master; then
+    echo 'Successfully initialized the repository'
+    echo
+  else
+    echo 'Error initializing the repository'
+    echo "Please run 'bacpac init' again until successful, or bacpac will not work"
+    echo "properly"
+    echo
+    exit 1
+  fi
+  bacpac-backup 'packages.list'
+  bacpac-backup 'mirrorlist'
+  bacpac-backup 'pacman.conf'
+}
+
 if [[ "$#" != 1 ]]; then
   bacpac-usage
   exit 1
 fi
 
-if [[ "$1" == backup ]]; then
+if [[ "$1" == init ]]; then
+  bacpac-init
+elif [[ "$1" == backup ]]; then
   bacpac-setup
   bacpac-backup 'packages.list'
   bacpac-backup 'mirrorlist'
