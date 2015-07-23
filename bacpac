@@ -15,7 +15,7 @@
 # CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 bacpac-usage() {
-  echo 'bacpac version 0.1.0'
+  echo 'bacpac version 0.1.1'
   echo 'Copyright (c) 2015 David Bailey <robocoder.db@gmail.com>'
   echo
   echo "usage: $0 init|backup|restore|update|clean"
@@ -92,13 +92,17 @@ bacpac-backup() {
 }
 
 bacpac-restore() {
-  read -p "Restore $1 to $2? [Y/n] " response
-  if [[ "$response" =~ ^[Yy]$ || "$response" == '' ]]; then
+  if cmp --silent "$1" "$2"; then
+    echo "$1 is identical to $2; no need to restore"
+  else
+    read -p "Restore $1 to $2? [Y/n] " response
+    if [[ "$response" =~ ^[Yy]$ || "$response" == '' ]]; then
     sudo cp "$1" "$2" &&
     echo "Successfully restored $1 to $2" ||
     echo "Error restoring $1 to $2"
-  else
+    else
     echo "Not restoring $1 to $2"
+    fi
   fi
   echo
 }
