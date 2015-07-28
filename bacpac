@@ -129,7 +129,7 @@ bacpac-package-restore-install() {
     cat 'tmp/caninstall.list'
     read -p 'Install the above packages? [Y/n] ' response
     if [[ "$response" =~ ^[Yy]$ || "$response" == '' ]]; then
-      cat 'tmp/caninstall.list' | sudo pacman -S - &&
+      cat 'tmp/caninstall.list' | sudo pacman -Sy - &&
       echo 'Successfully installed the above packages' ||
       echo 'Error installing the above packages'
     else
