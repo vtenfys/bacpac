@@ -220,6 +220,7 @@ bacpac-update() {
     mv 'tmp/packages.list' 'packages.list'
     mv 'tmp/mirrorlist' 'mirrorlist'
     mv 'tmp/pacman.conf' 'pacman.conf'
+    bash post-update
     git add --all
     git commit -m 'Restore data after updating'
     git push
